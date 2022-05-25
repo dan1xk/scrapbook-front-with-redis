@@ -1,1 +1,1 @@
-# scrapbook-front
+# scrapbook-front with redis

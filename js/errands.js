@@ -3,9 +3,8 @@ const userLogged = localStorage.getItem('userLogged');
 const tableBody = document.getElementById("table");
 const user = document.getElementById("user-area");
 
-axios.defaults.baseURL = 'https://scrapbookcache.herokuapp.com';
+axios.defaults.baseURL = 'http://localhost:8080';
 user.innerHTML = userLogged;
-
 
 function logout() {
     localStorage.setItem('userLogged', '');
@@ -54,22 +53,13 @@ async function addErrand() {
 }
 
 async function errandDelete(id, userId) {
-    
-    const u = {
-        userId: userId
-    }
 
-    await axios.delete(`/errand/${id}`, u)
-    .then(response => {
-        console.log(response.data);
-    })
+    await axios.delete(`/errand/${id}/${userId}`)
 
-    await showMessages();
+    showMessages()
 }
 
-async function errandChange(id) {
-    const users = await axios.get('/user').then(response => response.data)
-    userId = users.find(user => user.name === userLogged).id
+async function errandChange(id, userId) {
     const errand = prompt('Editar o Recado');
 
     const errandEdited = {
@@ -95,7 +85,7 @@ async function showMessages() {
             <td class="td">${position + 1}</td>
             <td class="td">${item.errands}</td>
             <td class="td">
-                <input type='submit' class='button' value='Editar' onclick="errandChange(${item.id})"> 
+                <input type='submit' class='button' value='Editar' onclick="errandChange(${item.id}, ${item.userId})"> 
                 <input type='submit' class='button button-red' value='Excluir' onclick="errandDelete(${item.id}, ${item.userId})">
             </td>`
             });
